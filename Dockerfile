@@ -3,7 +3,7 @@ FROM ubuntu:latest
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # Install git
 RUN apt-get update && \
-    apt-get install -y git gcc g++ make gnupg2 curl && \
+    apt-get install -y gcc g++ make gnupg2 curl && \
     apt-get -y autoclean
 
 # Install nvm and enable
