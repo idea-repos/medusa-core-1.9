@@ -26,7 +26,7 @@ RUN node -v
 RUN npm install -g yarn
 
 # Clone Repo
-RUN git clone https://github.com/yakshup/medusa-core-1.9.git /app && cd /app
+COPY . /app
 
 # Setup Workdir
 WORKDIR /app
