@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    name: Version packages PR
+    name: Build Code
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -34,13 +34,22 @@ jobs:
       - name: Build packages
         run: yarn build
 
-      - name: Create Release Pull Request
-        uses: changesets/action@v1
-        with: 
-          version: yarn version
-          publish: yarn release
-          commit: "chore: Release"
-          title: "chore: Release"
-          createGithubReleases: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract packages
+        run: |
+          npm i medusa-dev-cli -g
+          medusa-dev --set-path-to-repo `pwd`
+          mkdir -p output_medusa
+          cd output_medusa
+          echo "-----------Cleaning Output Directory------------"
+          rm -rf ./*
+          cp ../sample_package.json package.json
+          echo "-----------Setup Yarn Version------------"
+          yarn set version 1.22.19
+          timeout 10m medusa-dev || exit 0
+          cd ..
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: medusa-artifact
+          path: output_medusa/
