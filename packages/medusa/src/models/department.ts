@@ -7,7 +7,7 @@ import { Store } from './store';
 
 
 @Entity()
-export class Department extends SoftDeletableEntity {
+export class Department  {
     @PrimaryGeneratedColumn()
     id: string;
     

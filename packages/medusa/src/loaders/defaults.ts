@@ -21,11 +21,21 @@ import {
 import { CurrencyRepository } from "../repositories/currency"
 import { FlagRouter } from "../utils/flag-router"
 import SalesChannelFeatureFlag from "./feature-flags/sales-channels"
+import UserRepository from '../repositories/user';
+import StoreRepository from "../repositories/store"
+import { randomBytes } from 'crypto';
+
+function generateRandomString(length) {
+  return randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
+}
+
+
 import {
   AbstractPaymentProcessor,
   AbstractPaymentService,
   AbstractTaxService,
 } from "../interfaces"
+
 
 const silentResolution = <T>(
   container: AwilixContainer,
@@ -82,6 +92,87 @@ export default async ({
   const entityManager = container.resolve<EntityManager>("manager")
 
   await entityManager.transaction(async (manager: EntityManager) => {
+    const userRepo =
+    container.resolve<typeof UserRepository>("userRepository")
+    //const userRepo = manager.withRepository(UserRepository);
+    const hasUser = !!(await userRepo.countBy({"email": "john@example.com"}))
+    
+    if(!hasUser){
+      
+      const query = `INSERT INTO "user" ("id", "email", "first_name", "last_name", "password_hash", "role")
+      VALUES ($1, $2, $3, $4, $5, $6)`
+      
+      const uid = generateRandomString(10);
+      const email = "john@example.com"
+      const first_name = "John"
+      const last_name = "Sigma"
+      const password_hash = "c2NyeXB0AAEAAAABAAAAAVzglNRXcFGwrPk9xORWS8WjyqZbf9iiLR4G4C910EicP4nv1/KGrF9M8zfXyA03XKe7FIBoJqmGsNggz9Pffqxi6HjsjU7Bm1uMeoFiXZK3"
+      const role = "member"
+      
+      let user = await manager.queryRunner?.query(query, [
+        uid,
+        email,
+        first_name,
+        last_name,
+        password_hash,
+        role,
+      ])
+      
+      console.log("USER - ", user)
+      //CREATE STORE
+      // const storeRepo = manager.withRepository(StoreRepository);
+      // const hasUser = !!(await userRepo.count())
+      const name = "T-Shirts"
+      const default_currency_code = "usd"
+      
+      let sid1 =  generateRandomString(10);
+      const query2 = `INSERT INTO "store" ("id", "name", "default_currency_code")
+      VALUES ($1, $2, $3)`
+      
+      let _store = await manager.queryRunner?.query(query2, [
+        sid1,
+        name,
+        default_currency_code
+      ])
+      const name2 = "Flower Valley"
+      let sid2 =  generateRandomString(10);
+      const query3 = `INSERT INTO "store" ("id", "name", "default_currency_code")
+      VALUES ($1, $2, $3)`
+      
+      let store = await manager.queryRunner?.query(query3, [
+        sid2,
+        name2,
+        default_currency_code
+      ])
+      
+      console.log("store - ", store)
+      
+      
+      const query4 = `INSERT INTO "department" ("id", "user_id", "store_id")
+      VALUES ($1, $2, $3)`
+      
+      await manager.queryRunner?.query(query4, [
+        generateRandomString(10),
+        uid,
+        sid1
+      ])
+      
+      
+      await manager.queryRunner?.query(query4, [
+        generateRandomString(10),
+        uid,
+        sid2
+      ])
+      
+      console.log("store - ", store)
+      
+      
+      
+    }
+    
+    
+    
+    
     const countryRepo = manager.withRepository(countryRepository)
     const hasCountries = !!(await countryRepo.count())
     if (!hasCountries) {

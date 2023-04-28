@@ -152,23 +152,23 @@ class UserService extends TransactionBaseService {
     //const userRepo = this.activeManager_.withRepository(this.userRepository_)
     const departRepo = this.activeManager_.withRepository(this.departmentRepository_)
     let departments;
-    // console.log('----------------------------------------------------------------a user_id', user_id)
+    console.log('----------------------------------------------------------------a user_id', user_id)
     try{
       departments = await departRepo.find({
         where: { user_id:user_id },
         relations:{ stores: true}
       })
-      //console.log('----------------------------------------------------------------a departments', departments, departments.stores)
+      console.log('----------------------------------------------------------------a departments', departments, departments.stores)
     }
     catch(err){
-      //console.log('----------------------------------------------------------------a err', err)
+      console.log('----------------------------------------------------------------a err', err)
     }
     
     //    if (!user_id) {
        
     //       throw new Error("User not found");
     //     }
-    // console.log('----------------------------------------------------------------a department', department)
+    console.log('----------------------------------------------------------------a department', departments)
     return departments;
   }
 
