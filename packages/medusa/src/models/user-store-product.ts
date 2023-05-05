@@ -9,8 +9,8 @@ import { Store } from './store';
 @Entity({'name':'user_store_products'})
 export class UserStoreProduct{
 
-    @PrimaryGeneratedColumn()
-    id: string;
+    @PrimaryGeneratedColumn('increment')
+    id: number;
     
     @Column()
     store_id: string;

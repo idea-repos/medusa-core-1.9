@@ -474,9 +474,9 @@ class ProductService extends TransactionBaseService {
   ){
   
     let uid = crypto.randomUUID()
-  console.log('----------------------------------------------------------------New  uid:', uid);
+  console.log('----------------------------------------------------------------New  uid: to b 123 ---', uid);
   const userStoreProductRepo = dataSource.getRepository(UserStoreProduct);
-  const createdProduct =  userStoreProductRepo.save({id:uid,product_id:productId, user_id:userId, store_id:storeId}).then(createdUser => {
+  const createdProduct =  userStoreProductRepo.save({product_id:productId, user_id:userId, store_id:storeId}).then(createdUser => {
       console.log('----------------------------------------------------------------New userStoreProductRepo created:', createdProduct);
     })
     .catch(error => {
