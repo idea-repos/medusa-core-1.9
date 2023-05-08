@@ -27,6 +27,20 @@ import { CreateProductInput } from "../types/product"
 import { CreateProductCategoryInput } from "../types/product-category"
 import getMigrations, { getModuleSharedResources } from "./utils/get-migrations"
 
+
+import UserRepository from '../repositories/user';
+
+import StoreRepository from "../repositories/store"
+import { randomBytes } from 'crypto';
+import { dataSource } from "../loaders/database"
+import SalesChannelRepository from "../repositories/sales-channel"
+import { Department, SalesChannel, Store, User } from "../models"
+
+function generateRandomString(length) {
+  return randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
+}
+
+
 type SeedOptions = {
   directory: string
   migrate: boolean
@@ -232,6 +246,92 @@ const seed = async function ({ directory, migrate, seedFile }: SeedOptions) {
         }
       }
     }
+
+    const userRepo = dataSource.getRepository(User)
+    const storeRepo = dataSource.getRepository(Store)
+    const departmentRepo = dataSource.getRepository(Department)
+    const salesChannelRepository = dataSource.getRepository(SalesChannel)
+    // const userRepo = manager.withRepository(UserRepository);
+    const hasUser = !!(await userRepo.countBy({"email": "john@example.com"}))
+    console.log('----------------------------------------------------USER------------',hasUser);
+    if (!hasUser) {
+      
+      const query = `INSERT INTO "user" ("id", "email", "first_name", "last_name", "password_hash", "role")
+      VALUES ($1, $2, $3, $4, $5, $6)`
+      
+      const uid = generateRandomString(10);
+      const email = "john@example.com"
+      const first_name = "John"
+      const last_name = "Sigma"
+      const password_hash = "c2NyeXB0AAEAAAABAAAAAVzglNRXcFGwrPk9xORWS8WjyqZbf9iiLR4G4C910EicP4nv1/KGrF9M8zfXyA03XKe7FIBoJqmGsNggz9Pffqxi6HjsjU7Bm1uMeoFiXZK3"
+      const role = "member"
+      
+      let user = await manager.queryRunner?.query(query, [
+        uid,
+        email,
+        first_name,
+        last_name,
+        password_hash,
+        role,
+      ])
+      
+      console.log(',,,,,,,,,,,,,,,,,,user,,,,,,,',user);
+      
+      
+      userRepo.insert({
+        id:uid,
+        email,
+        first_name,
+        last_name,
+        password_hash,
+        // @ts-ignore
+        role
+      })
+      console.log("USER - ", user)
+      const firstChannel = await salesChannelRepository.findOneBy({'name':'Default Sales Channel'})
+      // @ts-ignore
+      console.log("firstChannel - ", firstChannel, firstChannel['id'])
+      //  CREATE STORE
+      // const storeRepo = manager.withRepository(StoreRepository);
+      // const hasUser = !!(await userRepo.count())
+      const name = "T-Shirts"
+      const default_currency_code = "usd"
+      
+      let sid1 =  generateRandomString(10);
+
+      const name2 = "Flower Valley"
+      let sid2 =  generateRandomString(10);
+
+      storeRepo.insert({
+        "id": sid1, name, default_currency_code,
+          // @ts-ignore
+         "default_channel_id":firstChannel['id']
+      })
+      storeRepo.insert({
+        "id": sid2, "name":name2, default_currency_code,
+        // @ts-ignore
+         "default_channel_id":firstChannel['id']
+      })
+      console.log("store - ", store)
+      
+
+      departmentRepo.insert({
+        user_id:uid,
+        store_id: sid1
+      });
+
+      departmentRepo.insert({
+        user_id:uid,
+        store_id: sid2
+      });
+      
+      console.log("store - ", store)
+      
+      
+      
+    }
+   
+  
 
     if (dbType !== "sqlite") {
       for (const c of categories) {
