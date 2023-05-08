@@ -41,7 +41,10 @@ export class Product extends SoftDeletableEntity {
   subtitle: string | null
 
   @Column({ type: "text", nullable: true })
-  description: string | null
+  description_1: string | null
+
+  @Column({ type: "text", nullable: true })
+  description_2: string | null
 
   @Index({ unique: true, where: "deleted_at IS NULL" })
   @Column({ type: "text", nullable: true })

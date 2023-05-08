@@ -49,13 +49,23 @@ export const productColumnsDefinition: ProductColumnDefinition = {
       entityName: "product",
     },
   },
-  "Product Description": {
-    name: "Product Description",
+  "Product Description_1": {
+    name: "Product Description_1",
     importDescriptor: {
-      mapTo: "product.description",
+      mapTo: "product.description_1",
     },
     exportDescriptor: {
-      accessor: (product: Product): string => product?.description ?? "",
+      accessor: (product: Product): string => product?.description_1 ?? "",
+      entityName: "product",
+    },
+  },
+  "Product Description_2": {
+    name: "Product Description_2",
+    importDescriptor: {
+      mapTo: "product.description_2",
+    },
+    exportDescriptor: {
+      accessor: (product: Product): string => product?.description_2 ?? "",
       entityName: "product",
     },
   },

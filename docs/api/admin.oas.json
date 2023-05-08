@@ -12964,7 +12964,15 @@
           },
           {
             "in": "query",
-            "name": "description",
+            "name": "description_1",
+            "description": "product description to search for.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "description_2",
             "description": "product description to search for.",
             "schema": {
               "type": "string"
@@ -29229,7 +29237,11 @@
             "description": "The subtitle of the Product",
             "type": "string"
           },
-          "description": {
+          "description_1": {
+            "description": "A description of the Product.",
+            "type": "string"
+          },
+          "description_2": {
             "description": "A description of the Product.",
             "type": "string"
           },

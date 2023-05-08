@@ -58,7 +58,11 @@ export class FilterableProductProps {
 
   @IsString()
   @IsOptional()
-  description?: string
+  description_1?: string
+
+  @IsString()
+  @IsOptional()
+  description_2?: string
 
   @IsString()
   @IsOptional()
@@ -123,7 +127,8 @@ export type CreateProductInput = {
   title: string
   subtitle?: string
   profile_id?: string
-  description?: string
+  description_1?: string
+  description_2?: string
   is_giftcard?: boolean
   discountable?: boolean
   images?: string[]

@@ -110,6 +110,8 @@ import crypto from 'crypto';
  *     $ref: "#/components/responses/500_error"
  */
 export default async (req, res) => {
+  console.log('create API>>>>>>>>>>>>>>', req.body);
+  
   const validated = await validator(AdminPostProductsReq, req.body)
 
   const logger: Logger = req.scope.resolve("logger")
@@ -166,6 +168,8 @@ export default async (req, res) => {
       validated.sales_channels = [defaultSalesChannel]
     }
 
+    console.log('validated', validated);
+    
     const newProduct = await productService
       .withTransaction(manager)
       .create({ ...validated, profile_id: shippingProfile.id })
@@ -592,7 +596,11 @@ export class AdminPostProductsReq {
 
   @IsString()
   @IsOptional()
-  description?: string
+  description_1?: string
+
+  @IsString()
+  @IsOptional()
+  description_2?: string
 
   @IsBoolean()
   is_giftcard = false
