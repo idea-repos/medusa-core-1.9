@@ -305,22 +305,26 @@ const seed = async function ({ directory, migrate, seedFile }: SeedOptions) {
       storeRepo.insert({
         "id": sid1, name, default_currency_code,
           // @ts-ignore
-         "default_channel_id":firstChannel['id']
+         "default_sales_channel_id":firstChannel['id']
       })
       storeRepo.insert({
         "id": sid2, "name":name2, default_currency_code,
         // @ts-ignore
-         "default_channel_id":firstChannel['id']
+         "default_sales_channel_id":firstChannel['id']
       })
       console.log("store - ", store)
       
 
       departmentRepo.insert({
+        id: generateRandomString(10),
         user_id:uid,
         store_id: sid1
       });
 
+
+      
       departmentRepo.insert({
+        id: generateRandomString(10),
         user_id:uid,
         store_id: sid2
       });

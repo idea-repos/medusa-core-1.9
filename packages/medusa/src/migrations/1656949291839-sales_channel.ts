@@ -31,9 +31,9 @@ export class salesChannel1656949291839 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "store" ADD "default_sales_channel_id" character varying`
     )
-    await queryRunner.query(
-      `ALTER TABLE "store" ADD CONSTRAINT "UQ_61b0f48cccbb5f41c750bac7286" UNIQUE ("default_sales_channel_id")`
-    )
+    // await queryRunner.query(
+    //   `ALTER TABLE "store" ADD CONSTRAINT "UQ_61b0f48cccbb5f41c750bac7286" UNIQUE ("default_sales_channel_id")`
+    // )
 
     await queryRunner.query(
       `ALTER TABLE "cart" ADD CONSTRAINT "FK_a2bd3c26f42e754b9249ba78fd6" FOREIGN KEY ("sales_channel_id") REFERENCES "sales_channel"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
