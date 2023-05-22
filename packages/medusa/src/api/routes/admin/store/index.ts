@@ -9,6 +9,8 @@ export default (app) => {
   app.use("/store", route)
 
   route.get("/", middlewares.wrap(require("./get-store").default))
+  route.get("/get-all-stores", middlewares.wrap(require("./get-all-stores").default))
+
   route.get(
     "/payment-providers",
     middlewares.wrap(require("./list-payment-providers").default)

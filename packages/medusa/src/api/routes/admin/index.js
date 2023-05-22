@@ -52,7 +52,7 @@ export default (app, container, config) => {
   route.use(
     cors({
       origin: parseCorsOrigins(adminCors),
-      credentials: true,
+      credentials: false,
     })
   )
 
@@ -62,20 +62,20 @@ export default (app, container, config) => {
   authRoutes(route)
 
   // reset password
-  unauthenticatedUserRoutes(route)
+  // unauthenticatedUserRoutes(route)
 
   // accept invite
-  unauthenticatedInviteRoutes(route)
+  // unauthenticatedInviteRoutes(route)
 
   const middlewareService = container.resolve("middlewareService")
   // Calls all middleware that has been registered to run before authentication.
-  middlewareService.usePreAuthentication(app)
+  // middlewareService.usePreAuthentication(app)
 
   // Authenticated routes
-  route.use(middlewares.authenticate())
+  // route.use(middlewares.authenticate())
 
   // Calls all middleware that has been registered to run after authentication.
-  middlewareService.usePostAuthentication(app)
+  // middlewareService.usePostAuthentication(app)
 
   analyticsConfigs(route)
   appRoutes(route)

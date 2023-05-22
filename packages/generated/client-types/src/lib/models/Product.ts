@@ -32,8 +32,7 @@ export interface Product {
   /**
    * A short description of the Product.
    */
-  description_1: string | null
-  description_2: string | null
+  description: string | null
   /**
    * A unique identifier for the Product (e.g. for slug structure).
    */

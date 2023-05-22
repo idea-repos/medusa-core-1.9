@@ -88,7 +88,30 @@ class StoreService extends TransactionBaseService {
       },
       config
     )
+    console.log("query---------", query);
+    
     const store = await storeRepo.findOne(query)
+
+    if (!store) {
+      throw new MedusaError(MedusaError.Types.NOT_FOUND, "Store does not exist")
+    }
+
+    return store
+  }
+
+
+  async retrieveallstores(config: FindConfig<Store[]>): Promise<Store[]> {
+    const storeRepo = this.activeManager_.withRepository(this.storeRepository_)
+    const query = buildQuery(
+      config
+    )
+    console.log("query---------", query);
+    
+    const store = await storeRepo.find()
+    
+    // const store = await storeRepo.find({take: 3})
+    // const store = await storeRepo.query('SELECT * FROM public."store" ORDER BY id ASC LIMIT 100')
+
 
     if (!store) {
       throw new MedusaError(MedusaError.Types.NOT_FOUND, "Store does not exist")
